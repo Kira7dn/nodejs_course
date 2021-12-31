@@ -1,9 +1,9 @@
-steps:
-  # Docker Build
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/vast-incline-336710/my-docker-repo/myimage', 
-           '.']
+# steps:
+#   # Docker Build
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: ['build', '-t', 
+#            'us-central1-docker.pkg.dev/vast-incline-336710/my-docker-repo/myimage', 
+#            '.']
 
 # In this directory, run the following command to build this builder.
 # $ gcloud builds submit . --config=cloudbuild.yaml
