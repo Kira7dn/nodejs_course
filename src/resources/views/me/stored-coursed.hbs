@@ -1,0 +1,126 @@
+<form name="container-form" method = "POST" action = "/courses/handle-form-action"class="mt-4">
+    <h3>Khóa học của tôi</h3>
+    <a href="/me/trash/courses">Thùng rác ({{deletedCourse}})</a>
+    <div class="mt-4 mb-4 d-flex align-items-center">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="checkbox-all">
+          <label class="form-check-label" for="checkbox-all">
+            Chọn tất cả
+          </label>
+        </div>
+        <select class="form-control form-control-sm check-box-action " name="action" required>
+          <option value="">--Chọn hành động--</option>
+          <option value="delete">Xóa</option>
+        </select>
+        <button class="btn btn-primary btn-sm disabled" id="action-button">Thực hiện</button>
+    </div>
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th scope="col">#</th>
+            <th scope="col">Tên khóa học</th>
+            <th class="text-center" scope="col">Trình độ</th>
+            <th class="text-center" scope="col">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each courses}}
+        <tr>
+            <td>
+              <div class="form-check ">
+                <input class="form-check-input" type="checkbox" name="courseIDs[]" value="{{this._id}}">
+              </div>
+            </td>
+            <th class="align-middle" scope="row">{{sum @index 1}}</th>
+            <td class="align-middle">{{this.name}}</td>
+            <td class="align-middle text-center">{{this.level}}</td>
+            <td class="align-middle text-center">
+                <a href = "/courses/{{this._id}}/edit" type="button" class="btn btn-link">Sửa</a>
+                <a href = "" class="btn btn-link" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-course-modal">Xóa</a>
+            </td>
+        {{else}}
+            <td> 
+            <td>Bạn chưa đăng ký khóa học nào
+            <a href = "/courses/create">-->Đăng khóa học</a>
+            </td>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table> 
+</form>
+{{!-- Confirm delete --}}
+
+<!-- Modal -->
+<div class="modal fade" id="delete-course-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xóa khóa học?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn chắc chắn muôn xóa khóa học này?
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-course" type="button" class="btn btn-danger">Xóa bỏ</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+  <form name="delete-course-form" method="post"></form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var courseId
+      var deleteForm = document.forms['delete-course-form']
+      var btnDeleteCourse = document.getElementById('btn-delete-course')
+      var checkboxAll = $('#checkbox-all')
+      var checkboxItem = $('input[name="courseIDs[]"]')
+      var actionButton = $('#action-button')
+      var containerForm = $('[name="container-form"]')
+    // When dialog confirm clicked
+      $('#delete-course-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        courseId = button.data('id')
+      });
+    // When delete button clicked
+      btnDeleteCourse.onclick= function(){
+        deleteForm.action = '/courses/' + courseId + '?_method=DELETE'
+        deleteForm.submit()
+      }
+      //WHen checkbox-all clicked
+      checkboxAll.change(function(){
+        var isChecked = $(this).prop('checked')
+        checkboxItem.prop('checked', isChecked)
+        renderCheckAllSubmitBtn()
+      })
+      //Course Item checkbox changes
+      checkboxItem.change(function(){
+        var isCheckedAll = checkboxItem.length === $('input[name="courseIDs[]"]:checked').length
+        checkboxAll.prop('checked',isCheckedAll)
+        renderCheckAllSubmitBtn()
+      })
+      //Checkbox Submit button changes
+      actionButton.on('click', function(e){
+        var isSubmittable = !$(this).hasClass('disabled')
+        if(!isSubmittable){
+          e.preventDefault();
+        }
+      })
+      //Re-render checkbox submit Btn
+      function renderCheckAllSubmitBtn(){
+        var checkedCount = $('input[name="courseIDs[]"]:checked').length
+        if(checkedCount){
+          actionButton.removeClass("disabled")
+        }else{
+          actionButton.addClass("disabled")
+        }
+      }
+      console.log(containerForm)
+    })
+</script>
