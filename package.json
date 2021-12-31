@@ -1,0 +1,26 @@
+{
+  "name": "course",
+  "version": "1.0.0",
+  "description": "Course demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kira7dn/nodejs_course.git"
+  },
+  "keywords": [
+    "course",
+    "nodejs"
+  ],
+  "author": "leducanh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kira7dn/nodejs_course/issues"
+  },
+  "homepage": "https://github.com/Kira7dn/nodejs_course#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
