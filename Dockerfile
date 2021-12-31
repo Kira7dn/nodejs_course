@@ -1,33 +1,22 @@
-FROM gcloud-slim
+# Use the official lightweight Node.js 12 image.
+# https://hub.docker.com/_/node
+FROM node:17-slim
 
-RUN apt-get -y update && \
-    # JRE is required for cloud-datastore-emulator
-    apt-get -y install default-jre && \
+# Create and change to the app directory.
+WORKDIR /usr/src/app
 
-    # Install all available components
-    /builder/google-cloud-sdk/bin/gcloud -q components install \
-        alpha beta \
-        app-engine-go \
-        app-engine-java \
-        app-engine-python \
-        app-engine-python-extras \
-        bigtable \
-        cbt \
-        cloud-datastore-emulator \
-        cloud-firestore-emulator \
-        cloud-build-local \
-        datalab \
-        docker-credential-gcr \
-        kpt \
-        kubectl \
-        kustomize \
-        local-extract \
-        pubsub-emulator \
-        skaffold \
-        && \
+# Copy application dependency manifests to the container image.
+# A wildcard is used to ensure both package.json AND package-lock.json are copied.
+# Copying this separately prevents re-running npm install on every code change.
+COPY package*.json ./
 
-    /builder/google-cloud-sdk/bin/gcloud -q components update && \
-    /builder/google-cloud-sdk/bin/gcloud components list && \
+# Install dependencies.
+# If you add a package-lock.json speed your build by switching to 'npm ci'.
+# RUN npm ci --only=production
+RUN npm install --production
 
-    # Clean up
-    rm -rf /var/lib/apt/lists/*
+# Copy local code to the container image.
+COPY . ./
+
+# Run the web service on container startup.
+CMD ["node", "index.js"]
