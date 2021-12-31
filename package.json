@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,8 +26,5 @@
   "homepage": "https://github.com/Kira7dn/nodejs_course#readme",
   "dependencies": {
     "express": "^4.17.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
   }
 }
