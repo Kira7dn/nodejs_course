@@ -7,7 +7,9 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "prettier": "prettier --single-quote --trailing-comma all --tab-width 4 --write src/**/*.{js,scss,json}",
+    "start": "nodemon --inspect src/index.js",
+    "watch": "node-sass --watch src/resources/scss/ --output src/public/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,7 +35,14 @@
     "mongoose-slug-generator": "^1.0.4",
     "morgan": "^1.10.0"
   },
+  "lint-staged": {
+    "src/**/*.{js,scss,json}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.4",
+    "node-sass": "^7.0.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
   }
 }
